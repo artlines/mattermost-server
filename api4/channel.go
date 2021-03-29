@@ -6,6 +6,7 @@ package api4
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -887,6 +888,37 @@ func getChannelsForTeamForUser(c *Context, w http.ResponseWriter, r *http.Reques
 	if err != nil {
 		c.Err = err
 		return
+	}
+
+	for _, channel := range *channels {
+		if count, _ := c.App.GetChannelMemberCount(channel.Id); count > 2 {
+			continue
+		}
+
+		channelUnread, err := c.App.GetChannelUnread(channel.Id, c.Params.UserId)
+		if err != nil {
+			c.Err = err
+			return
+		}
+		channel.UnreadMsgCount = channelUnread.MsgCount + channelUnread.MentionCount
+		messages, _ := c.App.GetPostsPage(model.GetPostsOptions{
+			UserId:                   c.Params.UserId,
+			ChannelId:                channel.Id,
+			PostId:                   "",
+			Page:                     0,
+			PerPage:                  1,
+			SkipFetchThreads:         false,
+			CollapsedThreads:         false,
+			CollapsedThreadsExtended: false,
+		})
+		channel.LastMessage = messages.Posts[messages.Order[0]]
+		users, _ := c.App.GetChannelMembersPage(channel.Id, 0, 2)
+		u := *users
+		idx := sort.Search(len(u), func(i int) bool {
+			return u[i].UserId != c.Params.UserId
+		})
+		specialistUser, _ := c.App.GetUser(u[idx].UserId)
+		channel.SpecialistName = specialistUser.FirstName + " " + specialistUser.LastName
 	}
 
 	w.Header().Set(model.HEADER_ETAG_SERVER, channels.Etag())

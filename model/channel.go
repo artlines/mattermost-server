@@ -52,6 +52,9 @@ type Channel struct {
 	Props            map[string]interface{} `json:"props" db:"-"`
 	GroupConstrained *bool                  `json:"group_constrained"`
 	Shared           *bool                  `json:"shared"`
+	UnreadMsgCount   int64                  `json:"unread_message_count" db:"-"`
+	LastMessage   	 *Post                  `json:"post" db:"-"`
+	SpecialistName   string                 `json:"specialist_name" db:"-"`
 }
 
 type ChannelWithTeamData struct {
