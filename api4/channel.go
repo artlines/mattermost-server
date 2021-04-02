@@ -917,8 +917,12 @@ func getChannelsForTeamForUser(c *Context, w http.ResponseWriter, r *http.Reques
 		idx := sort.Search(len(u), func(i int) bool {
 			return u[i].UserId != c.Params.UserId
 		})
-		specialistUser, _ := c.App.GetUser(u[idx].UserId)
-		channel.SpecialistName = specialistUser.FirstName + " " + specialistUser.LastName
+		if idx >= 0 && idx < len(u) {
+			specialistUser, _ := c.App.GetUser(u[idx].UserId)
+			channel.SpecialistName = specialistUser.FirstName + " " + specialistUser.LastName
+		} else {
+			channel.SpecialistName = ""
+		}
 	}
 
 	w.Header().Set(model.HEADER_ETAG_SERVER, channels.Etag())
