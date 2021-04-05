@@ -51,6 +51,7 @@ func (a *App) InitPostMetadata() {
 func (a *App) PreparePostListForClient(originalList *model.PostList) *model.PostList {
 	list := &model.PostList{
 		Posts:      make(map[string]*model.Post, len(originalList.Posts)),
+		Users:      originalList.Users,
 		Order:      originalList.Order,
 		NextPostId: originalList.NextPostId,
 		PrevPostId: originalList.PrevPostId,
@@ -58,7 +59,8 @@ func (a *App) PreparePostListForClient(originalList *model.PostList) *model.Post
 
 	for id, originalPost := range originalList.Posts {
 		post := a.PreparePostForClient(originalPost, false, false)
-
+		user, _ := a.GetUser(post.UserId)
+		list.Users[post.UserId] = user
 		list.Posts[id] = post
 	}
 
@@ -93,7 +95,6 @@ func (a *App) OverrideIconURLIfEmoji(post *model.Post) {
 
 func (a *App) PreparePostForClient(originalPost *model.Post, isNewPost bool, isEditPost bool) *model.Post {
 	post := originalPost.Clone()
-
 	// Proxy image links before constructing metadata so that requests go through the proxy
 	post = a.PostWithProxyAddedToImageURLs(post)
 

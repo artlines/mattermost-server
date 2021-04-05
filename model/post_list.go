@@ -12,6 +12,7 @@ import (
 type PostList struct {
 	Order      []string         `json:"order"`
 	Posts      map[string]*Post `json:"posts"`
+	Users      map[string]*User `json:"users"`
 	NextPostId string           `json:"next_post_id"`
 	PrevPostId string           `json:"prev_post_id"`
 }
