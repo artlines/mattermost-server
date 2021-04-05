@@ -51,7 +51,7 @@ func (a *App) InitPostMetadata() {
 func (a *App) PreparePostListForClient(originalList *model.PostList) *model.PostList {
 	list := &model.PostList{
 		Posts:      make(map[string]*model.Post, len(originalList.Posts)),
-		Users:      originalList.Users,
+		Users:      make(map[string]*model.User, len(originalList.Posts)),
 		Order:      originalList.Order,
 		NextPostId: originalList.NextPostId,
 		PrevPostId: originalList.PrevPostId,
@@ -60,6 +60,7 @@ func (a *App) PreparePostListForClient(originalList *model.PostList) *model.Post
 	for id, originalPost := range originalList.Posts {
 		post := a.PreparePostForClient(originalPost, false, false)
 		user, _ := a.GetUser(post.UserId)
+		post.Metadata.File, _, _ = a.GetProfileImage(user)
 		list.Users[post.UserId] = user
 		list.Posts[id] = post
 	}
@@ -101,7 +102,6 @@ func (a *App) PreparePostForClient(originalPost *model.Post, isNewPost bool, isE
 	a.OverrideIconURLIfEmoji(post)
 
 	post.Metadata = &model.PostMetadata{}
-
 	if post.DeleteAt > 0 {
 		// For deleted posts we don't fill out metadata nor do we return the post content
 		post.Message = ""
