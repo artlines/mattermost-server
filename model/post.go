@@ -77,7 +77,6 @@ type Post struct {
 	DeleteAt   int64  `json:"delete_at"`
 	IsPinned   bool   `json:"is_pinned"`
 	UserId     string `json:"user_id"`
-	User       *User  `json:"user" db:"-"`
 	ChannelId  string `json:"channel_id"`
 	RootId     string `json:"root_id"`
 	ParentId   string `json:"parent_id"`
