@@ -115,3 +115,4 @@ __debug_bin
 report.xml
 go.*.orig
 config.override.mk
+mattermost-team-linux-amd64.tar.gz
