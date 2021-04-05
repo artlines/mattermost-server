@@ -60,6 +60,7 @@ func (a *App) PreparePostListForClient(originalList *model.PostList) *model.Post
 	for id, originalPost := range originalList.Posts {
 		post := a.PreparePostForClient(originalPost, false, false)
 		user, _ := a.GetUser(post.UserId)
+		post.Metadata.File, _, _ = a.GetProfileImage(user)
 		list.Users[post.UserId] = user
 		list.Posts[id] = post
 	}
