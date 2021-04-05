@@ -26,6 +26,7 @@ type PostMetadata struct {
 
 	// Reactions holds reactions made to the post.
 	Reactions []*Reaction `json:"reactions,omitempty"`
+	File      []byte      `json:"url"`
 }
 
 type PostImage struct {
