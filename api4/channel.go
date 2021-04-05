@@ -6,7 +6,6 @@ package api4
 import (
 	"encoding/json"
 	"net/http"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -925,7 +924,6 @@ func getChannelsForTeamForUser(c *Context, w http.ResponseWriter, r *http.Reques
 
 		specialistUser, _ := c.App.GetUser(idx)
 		channel.Specialist = specialistUser
-
 	}
 
 	w.Header().Set(model.HEADER_ETAG_SERVER, channels.Etag())
