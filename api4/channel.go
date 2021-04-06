@@ -913,7 +913,6 @@ func getChannelsForTeamForUser(c *Context, w http.ResponseWriter, r *http.Reques
 		channel.LastMessage = messages.Posts[messages.Order[0]]
 		users, _ := c.App.GetChannelMembersPage(channel.Id, 0, 2)
 		u := *users
-
 		var idx string
 		for i := range u {
 			if u[i].UserId != c.Params.UserId {
@@ -924,6 +923,7 @@ func getChannelsForTeamForUser(c *Context, w http.ResponseWriter, r *http.Reques
 
 		specialistUser, _ := c.App.GetUser(idx)
 		channel.Specialist = specialistUser
+
 	}
 
 	w.Header().Set(model.HEADER_ETAG_SERVER, channels.Etag())
