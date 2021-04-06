@@ -49,7 +49,8 @@ type FileInfo struct {
 	CreateAt        int64   `json:"create_at"`
 	UpdateAt        int64   `json:"update_at"`
 	DeleteAt        int64   `json:"delete_at"`
-	Url             string  `json:"url"`
+	Url             string  `db:"-" json:"url"`
+	UrlApi          string  `db:"-" json:"url_api"`
 	Path            string  `json:"-"` //not sent back to the client
 	ThumbnailPath   string  `json:"-"` //not sent back to the client
 	PreviewPath     string  `json:"-"` //not sent back to the client

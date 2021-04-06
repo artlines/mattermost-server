@@ -134,6 +134,11 @@ func (a *App) PreparePostForClient(originalPost *model.Post, isNewPost bool, isE
 	}
 
 	post.Metadata.Images = a.getImagesForPost(post, images, isNewPost)
+	siteUrl := a.GetSiteURL()
+	for _, file := range post.Metadata.Files {
+		file.Url = a.GeneratePublicLink(siteUrl, file)
+		file.UrlApi = siteUrl + "/api/v4/files/" + file.Id
+	}
 
 	return post
 }
